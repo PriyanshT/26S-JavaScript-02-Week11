@@ -1,7 +1,7 @@
 // The URL for the Article Search API at nytimes.com
 const baseURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
 // STEP 1: Get your own API key and paste it below…
-const key = "";
+const key = "Kx5jQJCMa8rkXXxTGBW9lGSo8KMn8GNa65Mb8pZnqOA9s2ix";
 let url;
 // Grab references to all the DOM elements you'll need to access
 const searchTerm = document.querySelector(".search");
@@ -10,16 +10,32 @@ const endDate = document.querySelector(".end-date");
 const searchForm = document.querySelector("form");
 const submitBtn = document.querySelector(".submit");
 const section = document.querySelector("section");
+
 // STEP 2: Add a submit event listener for the search form, referencing the fetchResults function as the callback
+submitBtn.addEventListener("click", fetchResults);
 
 // Functions
 function fetchResults(event) {
     // Use preventDefault() to stop the form submitting
+    event.preventDefault();
     // STEP 3: Assemble the full URL, according to the API documentation at the New York Times
+    // https://api.nytimes.com/svc/search/v2/articlesearch.json?q=election&api-key=Kx5jQJCMa8rkXXxTGBW9lGSo8KMn8GNa65Mb8pZnqOA9s2ix
+    url = `${baseURL}?q=${searchTerm.value}&api-key=${key}`;
+
+    // Class Activity - To complete the url by appending startdate and enddate
+
     // STEP 4: Use fetch() to pass the URL that we built as a request to the API service, then pass the JSON to the displayResults() function
+    fetch(url)
+        .then((resp) => {
+            return resp.json();
+        })
+        .then((json) => {
+            displayResults(json);
+        });
 }
 
 function displayResults(json) {
+    console.log(json);
     // STEP 5: Log to the console the results from the API
 
     // Clear out the old results…
@@ -27,6 +43,7 @@ function displayResults(json) {
         section.removeChild(section.firstChild);
     }
     // STEP 6: Create the variable articles to capture the articles from the JSON object
+    let articles = json.response.docs;
 
     if (articles.length === 0) {
         const para = document.createElement("p");
